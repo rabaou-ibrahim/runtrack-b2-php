@@ -47,5 +47,55 @@ class Room {
     {
         $this->capacity = $capacity;
     }
+    public function findOneRoom(int $id): Room
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+    
+        $stmt = $pdo->prepare("SELECT * FROM rooms WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $roomData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$roomData) {
+            return null;
+        }
+        
+        $room = new Room();
+        $room->setId($roomData['id']);
+        $room->setFloorId($roomData['floorId']);
+        $room->setName($roomData['name']);
+        $room->setCapacity($roomData['capacity']);
+        
+        return $room;
+
+    }
+    public function getGrades(): ?array
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+
+        $stmt = $pdo->prepare("SELECT grades FROM rooms WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $Grades = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $Grades;
+    }
 
 }

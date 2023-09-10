@@ -2,13 +2,13 @@
 
 class Grade {
     public ?int $id;
-    public ?int $room_id;
+    public ?int $grade_id;
     public ?string $name;
     public ?DateTime $year;
 
-    public function __construct(?int $_id = null, ?int $_room_id = null, ?string $_name = null, ?DateTime $_year = null){
+    public function __construct(?int $_id = null, ?int $_grade_id = null, ?string $_name = null, ?DateTime $_year = null){
         $this->id = $_id;
-        $this->room_id = $_room_id;
+        $this->grade_id = $_grade_id;
         $this->name = $_name;
         $this->year = $_year;
     }
@@ -16,9 +16,9 @@ class Grade {
     {
         return $this->id;  
     }
-    public function getRoomId(): ?int
+    public function getGradeId(): ?int
     {
-        return $this->room_id;  
+        return $this->grade_id;  
     }
     public function getName(): ?string
     {
@@ -33,9 +33,9 @@ class Grade {
         $this->id = $id;
     }
     
-    public function setRoomId(?int $room_id): static
+    public function setgradeId(?int $grade_id): static
     {
-        $this->room_id = $room_id;
+        $this->grade_id = $grade_id;
     }
     
     public function setName(?string $name): static
@@ -46,6 +46,56 @@ class Grade {
     public function setYear(?DateTime $year): static
     {
         $this->year = $year;
+    }
+    public function findOneGrade(int $id): Grade
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+    
+        $stmt = $pdo->prepare("SELECT * FROM grades WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $gradeData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$gradeData) {
+            return null;
+        }
+        
+        $grade = new grade();
+        $grade->setId($gradeData['id']);
+        $grade->setGradeId($gradeData['floorId']);
+        $grade->setName($gradeData['name']);
+        $grade->setCapacity($gradeData['capacity']);
+        
+        return $grade;
+
+    }
+    public function getStudents(): ?array
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+
+        $stmt = $pdo->prepare("SELECT students FROM grades WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $Students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $Students;
     }
     
 }

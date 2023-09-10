@@ -69,4 +69,38 @@ class Student {
     {
         $this->gender = $gender;
     }
+    public function findOneStudent(int $id): Student
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+    
+        $stmt = $pdo->prepare("SELECT * FROM students WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$studentData) {
+            return null;
+        }
+        
+        $student = new Student();
+        $student->setId($studentData['id']);
+        $student->setGradeId($studentData['gradeId']);
+        $student->setEmail($studentData['email']);
+        $student->setFullname($studentData['fullname']);
+        $student->setBirthdate($studentData['birthdate']);
+        $student->setGender($studentData['gender']);
+        
+        return $student;
+
+    }
+}
     

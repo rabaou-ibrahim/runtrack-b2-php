@@ -34,6 +34,55 @@ class Floor {
     {
         return $this->level;
     }
+    public function findOneFloor(int $id): Floor
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+    
+        $stmt = $pdo->prepare("SELECT * FROM floors WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        $floorData = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$floorData) {
+            return null;
+        }
+        
+        $floor = new Floor();
+        $floor->setId($floorData['id']);
+        $floor->setName($floorData['name']);
+        $floor->setLevel($floorData['level']);
+        
+        return $floor;
+
+    }
+    public function getRooms(): ?array
+    {
+        $dsn = 'mysql:host=hostname;dbname=database_name';
+        $username = 'root';
+        $password = '';
+    
+        try {
+            $pdo = new PDO($dsn, $username, $password);
+        } catch (PDOException $e) {
+            die("Erreur de connexion à la base de données: " . $e->getMessage());
+        }
+
+        $stmt = $pdo->prepare("SELECT rooms FROM floors WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        $Rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $Rooms;
+    }
 }
 
 ?>
