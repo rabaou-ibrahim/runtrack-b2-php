@@ -22,6 +22,18 @@ class Floor {
     {
         return $this->level;
     }
+    public function setId(?int $id): static
+    {
+        return $this->id;
+    }
+    public function setName(?string $name): static
+    {
+        return $this->name;
+    }
+    public function getLevel(?string $level): static
+    {
+        return $this->level;
+    }
 }
 
 ?>

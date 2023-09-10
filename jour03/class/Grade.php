@@ -28,6 +28,26 @@ class Grade {
     {
         return $this->year;  
     }
+    public function setId(?int $id): static
+    {
+        $this->id = $id;
+    }
+    
+    public function setRoomId(?int $room_id): static
+    {
+        $this->room_id = $room_id;
+    }
+    
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+    }
+    
+    public function setYear(?DateTime $year): static
+    {
+        $this->year = $year;
+    }
+    
 }
 
 ?>

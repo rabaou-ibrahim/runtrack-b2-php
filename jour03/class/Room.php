@@ -28,4 +28,24 @@ class Room {
     {
         return $this->capacity;
     }
+    public function setId(?int $id): static
+    {
+        $this->id = $id;
+    }
+
+    public function setFloorId(?int $floorId): static
+    {
+        $this->floor_id = $floorId;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
+    }
+
+    public function setCapacity(?int $capacity): static
+    {
+        $this->capacity = $capacity;
+    }
+
 }
